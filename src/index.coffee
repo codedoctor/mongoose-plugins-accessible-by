@@ -135,10 +135,12 @@ exports.accessibleBy = (schema, options = {}) ->
       optionalRoleOrRoles = _arrayify(optionalRoleOrRoles)
       if optionalRoleOrRoles.length > 0
         accessibleType.roles = _.difference accessibleType.roles,optionalRoleOrRoles
+        if accessibleType.roles.length == 0
+          @.accessibleBy = _.without @.accessibleBy,accessibleType
       else
         @.accessibleBy = _.without @.accessibleBy,accessibleType
         
-      accessibleType.roles = 
+      
       @markModified "accessibleBy"
     @
 

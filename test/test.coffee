@@ -37,7 +37,7 @@ describe 'WHEN working with the plugin', ->
       model.canPublicRead().should.equal true
       done()
 
-  describe 'when testing grantPublicAccess', ->
+  describe 'when invoking grantPublicAccess', ->
     it 'should add a write role', (done) ->   
       TestModel = mongoose.model "TestModel",TestSchema
       model = new TestModel( name : 'test')
@@ -52,19 +52,73 @@ describe 'WHEN working with the plugin', ->
       model.accessibleBy[0].roles.length.should.equal 2
       done()
 
-    describe 'when testing grantAccess on a different actor', ->
-      it 'should add a write role', (done) ->   
-        TestModel = mongoose.model "TestModel",TestSchema
-        model = new TestModel( name : 'test')
-        model.accessibleBy.should.have.property 'length',1
-        model.grantAccess 'frankid','write'
-        model.accessibleBy.should.have.property 'length',2
-        model.canActorAccess('frankid',"write").should.equal true
-        model.canActorAccess('frankid',"cook-coffee").should.equal false
-        model.canActorAccess({actorId : 'frankid'},"write").should.equal true
-        model.canActorAccess({actorId : 'frankid'},"cook-coffee").should.equal false
-        model.canActorAccess({actorId : 'johnnyid'},"cook-coffee").should.equal false
-        done()
+  describe 'WHEN invoking revokePublicAccess', ->
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.revokePublicAccess 'read'
+      model.accessibleBy.should.have.property 'length',0
+      done()
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.revokePublicAccess ['read','dummy']
+      model.accessibleBy.should.have.property 'length',0
+      done()
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.revokePublicAccess()
+      model.accessibleBy.should.have.property 'length',0
+      done()
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.revokePublicAccess ['dummy']
+      model.accessibleBy.should.have.property 'length',1
+      done()
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.grantPublicAccess ['admin','write']
+      model.accessibleBy[0].roles.should.have.property 'length',3
+      model.revokePublicAccess ['read']
+      model.accessibleBy.should.have.property 'length',1
+      model.accessibleBy[0].roles.should.have.property 'length',2
+      
+      model.canPublicAccess("read").should.equal false
+      model.canPublicAccess("write").should.equal true
+      model.canPublicAccess("admin").should.equal true
+      done()
+
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.grantPublicAccess ['admin','write']
+      model.revokePublicAccess ['read','admin','write']
+      model.accessibleBy.should.have.property 'length',0
+      done()
+
+
+  describe 'when testing grantAccess on a different actor', ->
+    it 'should add a write role', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.grantAccess 'frankid','write'
+      model.accessibleBy.should.have.property 'length',2
+      model.canActorAccess('frankid',"write").should.equal true
+      model.canActorAccess('frankid',"cook-coffee").should.equal false
+      model.canActorAccess({actorId : 'frankid'},"write").should.equal true
+      model.canActorAccess({actorId : 'frankid'},"cook-coffee").should.equal false
+      model.canActorAccess({actorId : 'johnnyid'},"cook-coffee").should.equal false
+      done()
   
   describe 'when granting/revoking/replacing', ->
     it 'should return the model to be chainable', (done) ->   
