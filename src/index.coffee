@@ -122,13 +122,13 @@ exports.accessibleBy = (schema, options = {}) ->
       accessibleType.roles.push(role) unless _.include(accessibleType.roles,role)
       
     @markModified "accessibleBy"
-    return true
+    @
 
   schema.methods.revokeAccess = (actorId, optionalRoles = null)  ->
-    return true
+    @
 
   schema.methods.replaceAccess = (actorId, optionalRoles = null)  ->
-    return true
+    @
 
   ###
   Grants the public access to the resource. Grant always adds, it never replaces.

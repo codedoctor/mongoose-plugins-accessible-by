@@ -65,6 +65,17 @@ describe 'WHEN working with the plugin', ->
         model.canActorAccess({actorId : 'frankid'},"cook-coffee").should.equal false
         model.canActorAccess({actorId : 'johnnyid'},"cook-coffee").should.equal false
         done()
+  
+  describe 'when granting/revoking/replacing', ->
+    it 'should return the model to be chainable', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.grantAccess('frankid','write').should.equal model
+      model.revokeAccess('frankid','write').should.equal model
+      model.replaceAccess('frankid','admin').should.equal model
+      done()
+      
       
   ###
   # Returns true if the user can update this organization
