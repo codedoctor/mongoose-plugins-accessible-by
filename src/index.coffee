@@ -43,6 +43,7 @@ defaultIsPublicType = (options) ->
 _findAccessibleTypeForActorId = (model,actorId) ->
   _.find model.accessibleBy || [], (x) -> x.actor && x.actor.actorId is actorId
 
+
 _findOrCreateAccessibleTypeForActor = (model,actor) ->
   at = _.find model.accessibleBy || [], (x) -> x.actor && x.actor.actorId is actor.actorId
   unless at
@@ -52,10 +53,13 @@ _findOrCreateAccessibleTypeForActor = (model,actor) ->
     model.accessibleBy.push at
   at
   
-
+###
+Converts an object, or null into an array. If it is already an array,
+uniques will be removed and the array will be returned.
+###
 _arrayify = (obj) ->
   return [] unless obj
-  return obj if _.isArray obj
+  return _.uniq(obj) if _.isArray obj
   [obj]
   
 # Todo: Extend this so that we return the actorId if it is an actor object, not an id
@@ -113,8 +117,8 @@ exports.accessibleBy = (schema, options = {}) ->
 
 
   schema.methods.grantAccess = (actorOrActorId, roleOrRoles)  ->
-    actorOrActorId = _ensureActor(actorOrActorId)
-    accessibleType = _findOrCreateAccessibleTypeForActor @,actorOrActorId
+    actor =  _ensureActor(actorOrActorId)
+    accessibleType = _findOrCreateAccessibleTypeForActor @,actor
     
     roleOrRoles = _arrayify(roleOrRoles)
     
@@ -124,10 +128,33 @@ exports.accessibleBy = (schema, options = {}) ->
     @markModified "accessibleBy"
     @
 
-  schema.methods.revokeAccess = (actorId, optionalRoles = null)  ->
+  schema.methods.revokeAccess = (actorOrActorId, optionalRoleOrRoles = null)  ->
+    actorId =  _ensureActorId(actorOrActorId)
+    accessibleType = _findAccessibleTypeForActorId @,actorId
+    if accessibleType
+      optionalRoleOrRoles = _arrayify(optionalRoleOrRoles)
+      if optionalRoleOrRoles.length > 0
+        accessibleType.roles = _.difference accessibleType.roles,optionalRoleOrRoles
+      else
+        @.accessibleBy = _.without @.accessibleBy,accessibleType
+        
+      accessibleType.roles = 
+      @markModified "accessibleBy"
     @
 
-  schema.methods.replaceAccess = (actorId, optionalRoles = null)  ->
+  schema.methods.replaceAccess = (actorOrActorId, optionalRoleOrRoles = null)  ->
+    optionalRoleOrRoles = _arrayify(optionalRoleOrRoles)
+    if optionalRoleOrRoles.length == 0
+      actorId =  _ensureActorId(actorOrActorId)
+      accessibleType = _findAccessibleTypeForActorId @,actorId
+      if accessibleType
+        @.accessibleBy = _.without @.accessibleBy,accessibleType 
+        @markModified "accessibleBy"  
+    else
+      actor =  _ensureActor(actorOrActorId)
+      accessibleType = _findOrCreateAccessibleTypeForActor @,actor
+      accessibleType.roles = optionalRoleOrRoles
+      @markModified "accessibleBy"  
     @
 
   ###
