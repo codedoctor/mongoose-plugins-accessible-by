@@ -20,6 +20,7 @@ A resource is the object you want to secure. It contains an accessibleBy array, 
 A role (or scope) grants rights that you define. Typical roles are read, write, admin.
 
 An actor is a person, but could also be the public (as any person), or group or whatever you come up with. Actors are referenced through an actorId, and internally have the format
+
 	actorId : String
 	displayName : String
 	image:
@@ -45,6 +46,7 @@ which is based on the activitystrea.ms format. You can simply use the actorId st
 At this point you have initialized a new model that contains an accessibleBy field. 
 By passing the defaultIsPublic option we also ensured that it contains an entry that allows public read access to the model.
 You can now do the following:
+
 	model.canActorAccess(actor || actorId,role)
 	model.canPublicAccess(role)
 	model.canPublicRead()
