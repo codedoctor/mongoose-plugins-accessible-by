@@ -1,8 +1,9 @@
 mongoose = require("mongoose")
-ObjectID = mongoose.ObjectID
-BinaryParser = mongoose.mongo.BinaryParser
 _ = require 'underscore'
 
+require('pkginfo')(module,'version')
+
+# Schemas used from activitystrea.ms
 MediaLinkType = 
   height: Number
   width: Number
@@ -30,6 +31,7 @@ AccessibleByType =
     type : [String]
     default: () -> ["read"]
 
+# Creates a default entry, if necessary
 defaultIsPublicType = (options) ->
   [
     actor : 
@@ -37,9 +39,15 @@ defaultIsPublicType = (options) ->
       objectType : "public"
     roles : [options.defaultPublicReadRole]
   ]
-    
-exports.accessibleBy = (schema, options) ->
-  options = {} unless options
+  
+
+###
+The plugin.
+Options supported:
+  defaultIsPublic - When set to true adds a default value that makes the associated object publicly readable.
+  defaultPublicReadRole - The role that signifies read permission, used in default value generation. Defaults to "read"
+###
+exports.accessibleBy = (schema, options = {}) ->
   
   _.defaults options,
     defaultIsPublic : false

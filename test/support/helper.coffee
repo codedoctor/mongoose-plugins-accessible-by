@@ -30,7 +30,7 @@ class Helper
     mongoose.connect dbUrl
 
   cleanDatabase : (cb) =>
-    #return cb(null)
+    return cb(null)
     console.log "CLEANING Database #{@database}"
     databaseCleaner = new DatabaseCleaner('mongodb')
     databaseCleaner.clean mongoose.createConnection(@database).db, (err) =>
@@ -54,4 +54,6 @@ class Helper
   stop: (done) =>
     # Should probably drop database here
     done()
-    
+
+module.exports = new Helper()
+

@@ -1,3 +1,2 @@
---require assert
 --require should
 --globals name,i,len
