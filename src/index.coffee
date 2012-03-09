@@ -100,9 +100,9 @@ exports.accessibleBy = (schema, options = {}) ->
   Method that determines if an actor specified with it's id has access to 
   the owning resource for the given role.
   ###
-  schema.methods.canActorAccess = (actorId,role) ->
+  schema.methods.canActorAccess = (actorOrActorId,role) ->
     # Add is owner override here
-    actorId = _ensureActorId(actorId,options)
+    actorId = _ensureActorId(actorOrActorId,options)
     accessibleType = _findAccessibleTypeForActorId @,actorId
     !!accessibleType && _.include( accessibleType.roles,role)
 
@@ -166,16 +166,16 @@ exports.accessibleBy = (schema, options = {}) ->
   resource.grantPublicAccess("somerole")
   resource.grantPublicAccess(["somerole","otherrole"])
   ###
-  schema.methods.grantPublicAccess = (roles)  ->
-    @grantAccess options.publicActorId,roles
+  schema.methods.grantPublicAccess = (roleOrRoles)  ->
+    @grantAccess options.publicActorId,roleOrRoles
 
   schema.methods.grantPublicReadOnlyAccess = ()  ->
     @grantAccess options.publicActorId,[options.defaultPublicReadRole]
   
-  schema.methods.revokePublicAccess = (roles = null)  ->
-    @revokeAccess options.publicActorId,roles
+  schema.methods.revokePublicAccess = (roleOrRoles = null)  ->
+    @revokeAccess options.publicActorId,roleOrRoles
 
-  schema.methods.replacePublicAccess = (roles = null)  ->
-    @replaceAccess options.publicActorId,roles
+  schema.methods.replacePublicAccess = (roleOrRoles = null)  ->
+    @replaceAccess options.publicActorId,roleOrRoles
 
       

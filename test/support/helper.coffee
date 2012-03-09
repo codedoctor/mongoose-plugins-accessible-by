@@ -27,10 +27,10 @@ class Helper
 
   # Connect to the test database.
   connectDatabase: () =>
-    mongoose.connect dbUrl
+    mongoose.connect @database
 
   cleanDatabase : (cb) =>
-    return cb(null)
+    return cb(null) # Stupid cleaner not working, bypassing
     console.log "CLEANING Database #{@database}"
     databaseCleaner = new DatabaseCleaner('mongodb')
     databaseCleaner.clean mongoose.createConnection(@database).db, (err) =>
@@ -42,8 +42,10 @@ class Helper
     obj.cleanDatabase = true if obj.initDatabase
     @mongo = mongoskin.db(@database)
     
+    @connectDatabase()
+
     stuff = []
-    
+
     if obj.cleanDatabase
       stuff.push (cb) => 
         @cleanDatabase(cb)

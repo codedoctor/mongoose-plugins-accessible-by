@@ -105,6 +105,32 @@ describe 'WHEN working with the plugin', ->
       model.accessibleBy.should.have.property 'length',0
       done()
 
+  describe 'WHEN invoking replacePublicAccess', ->
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.replacePublicAccess()
+      model.accessibleBy.should.have.property 'length',0
+      done()
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.replacePublicAccess 'write'
+      model.accessibleBy.should.have.property 'length',1
+      model.canPublicAccess("read").should.equal false
+      model.canPublicAccess("write").should.equal true
+      done()
+    it 'should remove the accessibleBy element', (done) ->   
+      TestModel = mongoose.model "TestModel",TestSchema
+      model = new TestModel( name : 'test')
+      model.accessibleBy.should.have.property 'length',1
+      model.replacePublicAccess ['read','write']
+      model.accessibleBy.should.have.property 'length',1
+      model.canPublicAccess("read").should.equal true
+      model.canPublicAccess("write").should.equal true
+      done()
 
   describe 'when testing grantAccess on a different actor', ->
     it 'should add a write role', (done) ->   
