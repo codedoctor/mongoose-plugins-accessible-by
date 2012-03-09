@@ -15,7 +15,7 @@ in some extra work.
 npm install mongoose-plugins-accessible-by
 
 ## Concepts
-A resource is the object you want to secure. It contains an accessibleBy array, which is provided and managed by this plugin
+A resource is the object you want to secure (your mongoose schema). It contains an accessibleBy array, which is provided and managed by this plugin
 
 A role (or scope) grants rights that you define. Typical roles are read, write, admin.
 
@@ -45,10 +45,10 @@ which is based on the activitystrea.ms format. You can simply use the actorId st
 		type : String
 	YourSchema.plugin pluginAccessibleBy.accessibleBy, defaultIsPublic : true
 	YourModel = mongoose.model "YourModel",YourSchema
-	model = new YourModel name : 'some resource name
+	model = new YourModel name : 'some resource name'
   
 At this point you have initialized a new model that contains an accessibleBy field. 
-By passing the defaultIsPublic option we also ensured that it contains an entry that allows public read access to the model.
+By passing the defaultIsPublic option we also ensure that it contains an entry that allows public read access to the model.
 You can now do the following:
 
 	model.canActorAccess(actor || actorId,role)
@@ -89,7 +89,7 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 
 * npm run-script watch
 
-# Publish new version
+## Publish new version
 
 * Change version in package.json
 * git tag -a v0.0.1 -m 'version 0.0.1'
