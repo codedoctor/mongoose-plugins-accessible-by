@@ -86,10 +86,6 @@ exports.accessibleBy = (schema, options = {}) ->
     defaultIsPublic : false
     defaultPublicReadRole : "read"
     publicActorId : "*"
-    creator :
-      fieldName : "createdBy"
-      idFieldName: "actorId"
-      hasFullAccess : true
   
   schema.add
     accessibleBy: 

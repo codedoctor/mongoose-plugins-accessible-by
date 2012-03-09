@@ -1,6 +1,5 @@
 ## About mongoose-plugins-accessible-by
 
-WORK IN PROGRESS, NOT YET RELEASED
 
 A simple plugin that adds an accessibleBy field to a mongoose schema to be
 able to determine access rights for models belonging to this schema.
@@ -21,41 +20,41 @@ A resource is the object you want to secure. It contains an accessibleBy array, 
 A role (or scope) grants rights that you define. Typical roles are read, write, admin.
 
 An actor is a person, but could also be the public (as any person), or group or whatever you come up with. Actors are referenced through an actorId, and internally have the format
-  actorId : String
-  displayName : String
-  image:
-    height: Number
-    width: Number
-    url: String
-  objectType : String 
+	actorId : String
+	displayName : String
+	image:
+		height: Number
+		width: Number
+		url: String
+	objectType : String 
 
 which is based on the activitystrea.ms format. You can simply use the actorId string in lieu of a full actor object, but you might want to use the actor object if you provide end user display for the roles and want to cache the display values.
 
-## Usage (Coffeescript Instructions )
+## Usage (Coffeescript)
   
-  mongoose = require 'mongoose'
-  pluginAccessibleBy = require 'mongoose-plugins-accessible-by'
+	mongoose = require 'mongoose'
+	pluginAccessibleBy = require 'mongoose-plugins-accessible-by'
 
-  YourSchema = new mongoose.Schema
-        name : 
-          type : String
-  YourSchema.plugin pluginAccessibleBy.accessibleBy, defaultIsPublic : true
-  YourModel = mongoose.model "YourModel",YourSchema
-  model = new YourModel name : 'some resource name
+	YourSchema = new mongoose.Schema
+		name : 
+		type : String
+	YourSchema.plugin pluginAccessibleBy.accessibleBy, defaultIsPublic : true
+	YourModel = mongoose.model "YourModel",YourSchema
+	model = new YourModel name : 'some resource name
   
 At this point you have initialized a new model that contains an accessibleBy field. 
 By passing the defaultIsPublic option we also ensured that it contains an entry that allows public read access to the model.
 You can now do the following:
-  model.canActorAccess(actor || actorId,role)
-  model.canPublicAccess(role)
-  model.canPublicRead()
-  model.grantAccess(actor || actorId, role || roles)
-  model.revokeAccess(actor || actorId, <nothing> || null || role || roles)
-  model.replaceAccess(actor || actorId, <nothing> || null || role || roles)
-  model.grantPublicAccess(role || roles)
-  model.grantPublicReadOnlyAccess()
-  model.revokePublicAccess( <nothing> || null || role || roles)
-  model.replacePublicAccess(<nothing> || null || role || roles)
+	model.canActorAccess(actor || actorId,role)
+	model.canPublicAccess(role)
+	model.canPublicRead()
+	model.grantAccess(actor || actorId, role || roles)
+	model.revokeAccess(actor || actorId, <nothing> || null || role || roles)
+	model.replaceAccess(actor || actorId, <nothing> || null || role || roles)
+	model.grantPublicAccess(role || roles)
+	model.grantPublicReadOnlyAccess()
+	model.revokePublicAccess( <nothing> || null || role || roles)
+	model.replacePublicAccess(<nothing> || null || role || roles)
   
 Please note that you need to save your model after you make changes. The plugin marks the model as modified though.
 
