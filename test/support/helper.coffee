@@ -54,8 +54,7 @@ class Helper
     
         
   stop: (done) =>
-    # Should probably drop database here
-    done()
+    mongoose.disconnect done
 
 module.exports = new Helper()
 

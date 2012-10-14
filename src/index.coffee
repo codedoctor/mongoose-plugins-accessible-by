@@ -45,12 +45,14 @@ _findAccessibleTypeForActorId = (model,actorId) ->
 
 
 _findOrCreateAccessibleTypeForActor = (model,actor) ->
+  console.log "LOOKING FOR AT"
   at = _.find model.accessibleBy || [], (x) -> x.actor && x.actor.actorId is actor.actorId
   unless at
     at = 
       actor : actor
       roles : []
     model.accessibleBy.push at
+    console.log "CREATED NEW AT"
   at
   
 ###
@@ -113,14 +115,22 @@ exports.accessibleBy = (schema, options = {}) ->
 
 
   schema.methods.grantAccess = (actorOrActorId, roleOrRoles)  ->
+    console.log "-----------------------------------"
+
     actor =  _ensureActor(actorOrActorId)
     accessibleType = _findOrCreateAccessibleTypeForActor @,actor
     
     roleOrRoles = _arrayify(roleOrRoles)
     
-    _.each roleOrRoles, (role) ->
-      accessibleType.roles.push(role) unless _.include(accessibleType.roles,role)
-      
+    console.log "SOURCE - TYPE: #{JSON.stringify(@)}"
+    console.log "ACCESSIBLE TYPE: #{JSON.stringify(accessibleType)}"
+    console.log "ROLES TO ADD: #{JSON.stringify(roleOrRoles)}"
+    console.log "EXISTING ROLES: #{JSON.stringify(accessibleType.roles)}"
+
+    accessibleType.roles = _.union accessibleType.roles,roleOrRoles
+    console.log "NEW ROLES: #{JSON.stringify(accessibleType.roles)}"
+    console.log "SOURCE - SELF: #{JSON.stringify(@)}"
+
     @markModified "accessibleBy"
     @
 
