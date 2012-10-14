@@ -31,7 +31,7 @@ An actor is a person, but could also be the public (as any person), or group or 
 
 which is based on the activitystrea.ms format. You can simply use the actorId string in lieu of a full actor object, but you might want to use the actor object if you provide end user display for the roles and want to cache the display values.
 
-![Diagram Overview](http://github.com/scottyapp/mongoose-plugins-accessible-by/raw/master/assets/mongoose-plugin-accessible-by.png)
+![Diagram Overview](http://github.com/codedoctor/mongoose-plugins-accessible-by/raw/master/assets/mongoose-plugin-accessible-by.png)
 
 
 
