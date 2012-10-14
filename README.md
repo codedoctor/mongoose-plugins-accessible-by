@@ -64,22 +64,12 @@ You can now do the following:
   
 Please note that you need to save your model after you make changes. The plugin marks the model as modified though.
 
-## Advertising :)
-
-Check out 
-
-* http://scottyapp.com
-
-Follow us on Twitter at 
-
-* @getscottyapp
-* @martin_sunset
-
-and like us on Facebook please. Every mention is welcome and we follow back.
-
 
 ## Release Notes
 
+### 0.2.0
+
+Not released yet - upgrade to mongoose 3.x
 
 ### 0.0.1
 
@@ -92,7 +82,7 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 ## Publish new version
 
 * Change version in package.json
-* git tag -a v0.0.1 -m 'version 0.0.1'
+* git tag -a v0.2.0 -m 'version 0.2.0'
 * git push --tags
 * npm publish
 
@@ -108,7 +98,7 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 
 ## Copyright
 
-Copyright (c) 2012 ScottyApp, Inc. See LICENSE for
+Copyright (c) 2012 Martin Wawrusch See LICENSE for
 further details.
 
 
