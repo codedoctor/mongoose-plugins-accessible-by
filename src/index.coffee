@@ -3,33 +3,27 @@ _ = require 'underscore'
 
 require('pkginfo')(module,'version')
 
-# Schemas used from activitystrea.ms
-MediaLinkType = 
-  height: Number
-  width: Number
-  url: String
         
 ActorType =
   actorId:
     type: String
     required : true
-  displayName:
-    type: String
-    match: /.{0,100}/
-  image :
-    type: MediaLinkType
   objectType : 
     type: "string"
     default: "person"
 
-AccessibleByType = # new mongoose.Schema
-  actor : 
-    type : ActorType
-    required: true
-    match: /.{1,200}/
-  roles:  
-    type : [String]
-    default: () -> ["read"]
+AccessibleByType = new mongoose.Schema
+    actor : 
+      type : ActorType
+      required: true
+      match: /.{1,200}/
+    roles:  
+      type : [String]
+      default: () -> ["read"]
+  , 
+    strict : false
+    id: false
+    _id: false
 
 # Creates a default entry, if necessary
 defaultIsPublicType = (options) ->
@@ -44,16 +38,14 @@ _findAccessibleTypeForActorId = (model,actorId) ->
   _.find model.accessibleBy || [], (x) -> x.actor && x.actor.actorId is actorId
 
 
-_findOrCreateAccessibleTypeForActor = (model,actor) ->
-  #console.log "LOOKING FOR AT"
-  at = _.find model.accessibleBy || [], (x) -> x.actor && x.actor.actorId is actor.actorId
+_findOrCreateAccessibleTypeForActor = (model,actor,roleOrRoles = []) ->
+  #console.log "LOOKING FOR  #{JSON.stringify(actor)}"
+  at = _findAccessibleTypeForActorId model,actor.actorId
   unless at
     at = 
       actor : actor
-      roles : []
+      roles : roleOrRoles
     model.accessibleBy.push at
-    #model.markModified 'accessibleBy'
-    #console.log "CREATED NEW AT"
   at
   
 ###
@@ -122,9 +114,11 @@ exports.accessibleBy = (schema, options = {}) ->
     #console.log "-----------------------------------"
 
     actor =  _ensureActor(actorOrActorId)
-    accessibleType = _findOrCreateAccessibleTypeForActor @,actor
-    
+
     roleOrRoles = _arrayify(roleOrRoles)
+
+    accessibleType = _findOrCreateAccessibleTypeForActor @,actor,roleOrRoles
+    
     
     #console.log "SOURCE - TYPE: #{JSON.stringify(@)}"
     #console.log "ACCESSIBLE TYPE: #{JSON.stringify(accessibleType)}"

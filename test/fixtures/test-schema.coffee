@@ -8,3 +8,4 @@ module.exports = new mongoose.Schema
         trim: true
         required: true
         match: /.{3,40}/
+        

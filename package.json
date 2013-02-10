@@ -18,6 +18,7 @@
     "mongoose","roles","security","plugin"
   ],
   "scripts": {
+    "prepublish" : "node_modules/.bin/coffee -c -o lib src",
     "watch" : "node_modules/.bin/coffee -c -w  -o lib src",
     "test": "node_modules/.bin/coffee -c -o lib src;NODE_ENV=test node_modules/.bin/mocha --timeout 10000 -R spec test/*.coffee"
   },

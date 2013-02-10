@@ -68,6 +68,7 @@ Please note that you need to save your model after you make changes. The plugin 
 
 ### 0.2.1
 * Version updates
+* Removed unnecessary stuff
 
 ### 0.2.0
 
@@ -84,7 +85,7 @@ Not released yet - upgrade to mongoose 3.x
 ## Publish new version
 
 * Change version in package.json
-* git tag -a v0.2.0 -m 'version 0.2.0'
+* git tag -a v0.2.1 -m 'version 0.2.1'
 * git push --tags
 * npm publish
 

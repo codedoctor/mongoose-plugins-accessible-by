@@ -136,21 +136,24 @@ describe 'WHEN working with the plugin', ->
     it '13. should add a write role', (done) ->   
       TestModel = mongoose.model "TestModel",TestSchema
       model = new TestModel( name : 'test')
-      #console.log "Phase1: #{JSON.stringify(model)}"
+      #console.log "13 - MODEL LOOKS LIKE: #{JSON.stringify(model)}"
       model.accessibleBy.should.have.property 'length',1
       model.grantAccess 'frankid','write'
+      #console.log "13B - MODEL LOOKS LIKE: #{JSON.stringify(model)}"
       model.accessibleBy.should.have.property 'length',2
-      #console.log "a"
+
+      #console.log "frankid write should be true"
       model.canActorAccess('frankid',"write").should.equal true
-      #console.log "b"
+      #console.log "frankid cook-coffee should be false"
       model.canActorAccess('frankid',"cook-coffee").should.equal false
-      #console.log "c"
+
+      #console.log "frankid write should be true"
       model.canActorAccess({actorId : 'frankid'},"write").should.equal true
-      #console.log "d"
+
+      #console.log "frankid cook-coffee should be false"
       model.canActorAccess({actorId : 'frankid'},"cook-coffee").should.equal false
-      #console.log "e"
+      #console.log "johnnyid cook-coffee should be false"
       model.canActorAccess({actorId : 'johnnyid'},"cook-coffee").should.equal false
-      #console.log "f"
       done()
   
   describe 'when granting/revoking/replacing', ->
