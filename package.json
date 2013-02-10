@@ -2,7 +2,7 @@
   "author": "Martin Wawrusch <martin@wawrusch.com> (http://martinatsunset.com)",
   "name": "mongoose-plugins-accessible-by",
   "description": "A mongoose plugin that adds role based security information to a schema",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main" : "lib/index.js",
   "repository": {
     "type": "git",

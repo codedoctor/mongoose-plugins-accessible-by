@@ -66,6 +66,9 @@ Please note that you need to save your model after you make changes. The plugin 
 
 ## Release Notes
 
+### 0.2.2
+* Updated travis file.
+
 ### 0.2.1
 * Version updates
 * Removed unnecessary stuff
@@ -85,7 +88,7 @@ Not released yet - upgrade to mongoose 3.x
 ## Publish new version
 
 * Change version in package.json
-git tag -a v0.2.1 -m 'version 0.2.1'
+git tag -a v0.2.2 -m 'version 0.2.2'
 git push --tags
 npm publish
 
