@@ -9,7 +9,7 @@ MediaLinkType =
   width: Number
   url: String
         
-ActorType = 
+ActorType =
   actorId:
     type: String
     required : true
@@ -22,7 +22,7 @@ ActorType =
     type: "string"
     default: "person"
 
-AccessibleByType =
+AccessibleByType = # new mongoose.Schema
   actor : 
     type : ActorType
     required: true
@@ -45,14 +45,15 @@ _findAccessibleTypeForActorId = (model,actorId) ->
 
 
 _findOrCreateAccessibleTypeForActor = (model,actor) ->
-  console.log "LOOKING FOR AT"
+  #console.log "LOOKING FOR AT"
   at = _.find model.accessibleBy || [], (x) -> x.actor && x.actor.actorId is actor.actorId
   unless at
     at = 
       actor : actor
       roles : []
     model.accessibleBy.push at
-    console.log "CREATED NEW AT"
+    #model.markModified 'accessibleBy'
+    #console.log "CREATED NEW AT"
   at
   
 ###
@@ -99,9 +100,12 @@ exports.accessibleBy = (schema, options = {}) ->
   the owning resource for the given role.
   ###
   schema.methods.canActorAccess = (actorOrActorId,role) ->
+    #console.log "RRR: #{JSON.stringify(@)}"
     # Add is owner override here
     actorId = _ensureActorId(actorOrActorId,options)
+    #console.log "ActorId: #{JSON.stringify(actorId)}"
     accessibleType = _findAccessibleTypeForActorId @,actorId
+    #console.log "FOUND: #{JSON.stringify(accessibleType)}"
     !!accessibleType && _.include( accessibleType.roles,role)
 
   schema.methods.canPublicAccess =  (role)->
@@ -115,21 +119,21 @@ exports.accessibleBy = (schema, options = {}) ->
 
 
   schema.methods.grantAccess = (actorOrActorId, roleOrRoles)  ->
-    console.log "-----------------------------------"
+    #console.log "-----------------------------------"
 
     actor =  _ensureActor(actorOrActorId)
     accessibleType = _findOrCreateAccessibleTypeForActor @,actor
     
     roleOrRoles = _arrayify(roleOrRoles)
     
-    console.log "SOURCE - TYPE: #{JSON.stringify(@)}"
-    console.log "ACCESSIBLE TYPE: #{JSON.stringify(accessibleType)}"
-    console.log "ROLES TO ADD: #{JSON.stringify(roleOrRoles)}"
-    console.log "EXISTING ROLES: #{JSON.stringify(accessibleType.roles)}"
+    #console.log "SOURCE - TYPE: #{JSON.stringify(@)}"
+    #console.log "ACCESSIBLE TYPE: #{JSON.stringify(accessibleType)}"
+    #console.log "ROLES TO ADD: #{JSON.stringify(roleOrRoles)}"
+    #console.log "EXISTING ROLES: #{JSON.stringify(accessibleType.roles)}"
 
     accessibleType.roles = _.union accessibleType.roles,roleOrRoles
-    console.log "NEW ROLES: #{JSON.stringify(accessibleType.roles)}"
-    console.log "SOURCE - SELF: #{JSON.stringify(@)}"
+    #console.log "NEW ROLES: #{JSON.stringify(accessibleType.roles)}"
+    #console.log "SOURCE - SELF: #{JSON.stringify(@)}"
 
     @markModified "accessibleBy"
     @
@@ -142,9 +146,9 @@ exports.accessibleBy = (schema, options = {}) ->
       if optionalRoleOrRoles.length > 0
         accessibleType.roles = _.difference accessibleType.roles,optionalRoleOrRoles
         if accessibleType.roles.length == 0
-          @.accessibleBy = _.without @.accessibleBy,accessibleType
+          @accessibleBy = _.without @accessibleBy,accessibleType
       else
-        @.accessibleBy = _.without @.accessibleBy,accessibleType
+        @accessibleBy = _.without @accessibleBy,accessibleType
         
       
       @markModified "accessibleBy"
@@ -156,7 +160,7 @@ exports.accessibleBy = (schema, options = {}) ->
       actorId =  _ensureActorId(actorOrActorId)
       accessibleType = _findAccessibleTypeForActorId @,actorId
       if accessibleType
-        @.accessibleBy = _.without @.accessibleBy,accessibleType 
+        @accessibleBy = _.without @accessibleBy,accessibleType 
         @markModified "accessibleBy"  
     else
       actor =  _ensureActor(actorOrActorId)

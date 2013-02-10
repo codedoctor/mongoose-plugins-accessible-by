@@ -64,8 +64,10 @@ You can now do the following:
   
 Please note that you need to save your model after you make changes. The plugin marks the model as modified though.
 
-
 ## Release Notes
+
+### 0.2.1
+* Version updates
 
 ### 0.2.0
 

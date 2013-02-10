@@ -27,11 +27,11 @@ class Helper
 
   # Connect to the test database.
   connectDatabase: () =>
-    mongoose.connect @database
+    mongoose.connect @database, safe:true
 
   cleanDatabase : (cb) =>
     return cb(null) # Stupid cleaner not working, bypassing
-    console.log "CLEANING Database #{@database}"
+    #console.log "CLEANING Database #{@database}"
     databaseCleaner = new DatabaseCleaner('mongodb')
     databaseCleaner.clean mongoose.createConnection(@database).db, (err) =>
       return cb(err) if err
@@ -40,7 +40,7 @@ class Helper
   start: (obj = {}, done) =>
     _.defaults obj, { initDatabase : true,cleanDatabase : true, createApps : true }
     obj.cleanDatabase = true if obj.initDatabase
-    @mongo = mongoskin.db(@database)
+    @mongo = mongoskin.db(@database, safe:true)
     
     @connectDatabase()
 
@@ -50,6 +50,7 @@ class Helper
       stuff.push (cb) => 
         @cleanDatabase(cb)
     
+    mongoose.set "debug",true
     async.series stuff, () => done()
     
         
