@@ -85,9 +85,9 @@ Not released yet - upgrade to mongoose 3.x
 ## Publish new version
 
 * Change version in package.json
-* git tag -a v0.2.1 -m 'version 0.2.1'
-* git push --tags
-* npm publish
+git tag -a v0.2.1 -m 'version 0.2.1'
+git push --tags
+npm publish
 
 ## Contributing to mongoose-plugins-accessible-by
  
